@@ -1,5 +1,4 @@
 
-
 import os
 import sys
 import argparse
@@ -12,35 +11,23 @@ import json
 from datetime import datetime
 import logging
 
-# Set up logging
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 logger = logging.getLogger(__name__)
 
 class EfficientNetScrewClassifier(nn.Module):
-
     def __init__(self, num_classes=6):
         super(EfficientNetScrewClassifier, self).__init__()
-        # Import timm for exact architecture match
         try:
             import timm
-            
-            # Use exact architecture from trained model (EfficientNet B3)
             self.backbone = timm.create_model('efficientnet_b3', pretrained=False, num_classes=0)
-            
-            # Custom classifier to match trained model structure
-            self.classifier = nn.Linear(1536, num_classes)  # EfficientNet B3 feature size: 1536
-            
+            self.classifier = nn.Linear(1536, num_classes)
         except ImportError:
             logger.error("timm not available. Installing fallback architecture...")
-            # Fallback to basic structure
             import torchvision.models as models
-            
-            # Create basic backbone
             backbone = models.efficientnet_b3(pretrained=False)
-            self.backbone = nn.Sequential(*list(backbone.children())[:-1])  # Remove classifier
+            self.backbone = nn.Sequential(*list(backbone.children())[:-1])
             self.backbone.add_module('adaptive_pool', nn.AdaptiveAvgPool2d(1))
             self.backbone.add_module('flatten', nn.Flatten())
-            
             self.classifier = nn.Linear(1536, num_classes)
     
     def forward(self, x):

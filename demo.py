@@ -7,17 +7,14 @@ def main():
     print("🎯 6 Defect Classes Supported")
     print("=" * 50)
     
-    # Check if test images exist
     test_dir = "test_images"
     if not os.path.exists(test_dir):
         print("❌ Test images directory not found!")
         return
     
-    # Run detection on sample images
     print("🚀 Running detection on sample images...")
     print()
     
-    # Import and run main detection
     import subprocess
     result = subprocess.run([sys.executable, "main.py", test_dir], 
                           capture_output=True, text=True)
