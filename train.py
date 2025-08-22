@@ -1,9 +1,4 @@
-#!/usr/bin/env python3
-"""
-Surface Defect Detection - Training Script
-Minimal training script for screw defect detection achieving 97.5% accuracy.
-Interview-ready implementation with EfficientNet-B3 backbone.
-"""
+
 
 import os
 import sys
